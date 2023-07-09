@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facemask Detector</title>
+</head>
+<body>
+    <h1>Facemask Detector 2.0 </h1>
+    <button onclick="startVideo()">Start</button>
+    <button onclick="stopVideo()">Stop</button>
+    <br>
+    <br>
+    <img src="{{ url_for('video_feed') }}" id="video" width="640" height="480" style="border:1px solid gray">
+    
+    <div> <h3> result:  {{ frame }}  </h3>  </div>
+
+
+    <script>
+        var video = document.getElementById('video');
+        var timeout;
+
+        function startVideo() {
+            video.src = "{{ url_for('video_feed') }}";
+            timeout = setTimeout(function () {
+                video.play();
+            }, 1000);
+        }
+
+        function stopVideo() {
+            clearTimeout(timeout);
+            video.pause();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Live Pose Estimation</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Live Detection/Recognition -- version 2</h2>
+				<div class="video-container">
+					<video id="video" autoplay></video>
+				</div>
+				<div class="form-group">
+					<label for="camera_source">Camera Source:</label>
+					<input type="text" class="form-control" id="camera_source" name="camera_source">
+				</div>
+				<button type="button" class="btn btn-primary" id="start_stream_btn">Start Stream</button>
+				<button type="button" class="btn btn-danger" id="stop_stream_btn">Stop Stream</button>
+			</div>
+			<div class="col-md-6">
+				<h2>Detected Data</h2>
+				<div class="json-box">
+					<pre id="json_output"></pre>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+	<!-- JavaScript -->
+	<script>
+		$(document).ready(function() {
+			// When the Start Stream button is clicked
+			$("#start_stream_btn").click(function() {
+				var camera_source = $("#camera_source").val();  // Retrieve the camera source value
+				startStream(camera_source);  // Call the startStream function with the camera source value
+			});
+
+			// When the Stop Stream button is clicked
+			$("#stop_stream_btn").click(function() {
+				stopAllCameras();
+			});
+
+			// Start the stream by default when the page loads
+			startStream("0");
+		});
+
+		function startStream(camera_source) {
+			$.ajax({
+				url: "/start_stream",
+				method: "POST",
+				data: {
+					"camera_source": camera_source  // Pass the camera source value to the server
+				}
+			});
+		}
+
+		function stopAllCameras() {
+			$.ajax({
+				url: "/stop_all_cameras",
+				method: "POST"
+			});
+		}
+
+		// Update the detected data every 0.5 seconds
+		setInterval(function() {
+			$.ajax({
+				url: "/getResult",
+				method: "POST",
+				success: function(result) {
+					$("#json_output").html(JSON.stringify(result, null, 4));  // Display the result in the JSON box
+				}
+			});
+		}, 500);
+	</script>
+</body>
+</html>

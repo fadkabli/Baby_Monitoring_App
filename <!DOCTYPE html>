@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Mask Detection</title>
+</head>
+<body>
+    <h1>Face Mask Detection</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <div>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function() {
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+            $('#start').click(function() {
+                navigator.mediaDevices.getUserMedia({video: true})
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function(err) {
+                    console.log('An error occurred: ' + err);
+                });
+            });
+
+            $('#stop').click(function() {
+                video.pause();
+                video.srcObject = null;
+            });
+
+            video.addEventListener('play', function() {
+                var interval = setInterval(function() {
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                }, 1000/30);
+            });
+
+            video.addEventListener('pause', function() {
+                clearInterval(interval);
+            });
+        });
+    </script>
+</body>
+</html>
+
+-------------------
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Face Mask Detection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+          crossorigin="anonymous">
+    <style>
+      #video-stream {
+        width: 640px;
+        height: 480px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <h1 class="text-center mb-4">Face Mask Detection</h1>
+          <div class="text-center">
+            <button id="start-button" type="button" class="btn btn-primary mr-3">Start</button>
+            <button id="stop-button" type="button" class="btn btn-danger">Stop</button>
+          </div>
+          <div class="text-center mt-3">
+            <h2 id="label"></h2>
+          </div>
+          <div class="text-center mt-3">
+            <video id="video-stream" autoplay></video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script>
+      var video = document.getElementById("video-stream");
+      var startButton = document.getElementById("start-button");
+      var stopButton = document.getElementById("stop-button");
+      var label = document.getElementById("label");
+
+      startButton.addEventListener("click", function() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+          })
+          .catch(function(err) {
+            console.log("Error: " + err);
+          });
+      });
+
+      stopButton.addEventListener("click", function() {
+        video.pause();
+        video.srcObject = null;
+      });
+
+      video.addEventListener("play", function() {
+        var canvas = document.createElement("canvas");
+        var context = canvas.getContext("2d");
+        var intervalId = setInterval(function() {
+          if (video.paused || video.ended) {
+            clearInterval(intervalId);
+            return;
+          }
+          context.drawImage(video, 0, 0, 640, 480);
+          var dataUrl = canvas.toDataURL("image/jpeg");
+          $.ajax({
+            type: "POST",
+            url: "/detect",
+            data: { image: dataUrl },
+            success: function(response) {
+              label.innerHTML = response.label;
+            },
+            error: function(err) {
+              console.log("Error: " + err);
+            }
+          });
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

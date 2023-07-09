@@ -1,0 +1,67 @@
+
+---------->        Code Explanation. Baby Monitoring 
+
+
+--------------------------------------------------> AJAX code
+
+
+JavaScript code that does the following:
+
+a. Gets the element with an ID of "warning_message" and assigns it to a variable called "warning_msg_obj".
+
+b. Defines a function called "updateValues" that makes an AJAX GET request to the "/getResult" route of the Flask app.
+
+c. The response from the server is parsed as a JSON object and the warning message and warning severity are extracted from it.
+
+d. If the response contains a warning message, the message is displayed in the "warning_message" element and the text color is set to green. Otherwise, the text is set to "Recognizing..." and the color is set to red.
+
+e. The function logs the warning message and warning severity to the console.
+
+f. The "updateValues" function is called once when the page is loaded and then every two seconds using the setInterval method.
+
+The purpose of this code is to continuously update the warning message and warning severity displayed on the web page based on the real-time data obtained from the Flask app.
+
+________________________________________________________> Main.py   code <--------------
+
+
+Import required modules:
+Thread: class for creating threads
+
+Set the camera source to be used for capturing video. You can choose between a webcam or a video file.
+
+Create a CameraOps object with the specified camera source. This object is used to capture and process video frames.
+
+Create a Flask app object.
+
+Create a global variable to keep track of whether a notification has been sent.
+
+Create a global dictionary to store the detection results.
+
+Set the delay time between notifications in milliseconds.
+
+Keep track of the time of the last warning.
+
+Define a function called getResult() that is called from JavaScript to get the detection results. This function checks whether a warning message has been generated and whether the severity of the warning is high. If a high-severity warning is detected, the function plays an alert sound, sends a notification (if it's the first warning or a warning after a specified delay), and updates the global variable that keeps track of the time of the last warning. If the severity of the warning is low or medium, the function stops the alert sound.
+Finally, the function converts the detection results dictionary to a JSON string and returns it.
+
+Define a function called get_detection_result() that yields frames for streaming on the detection/recognition page.
+ This function also stores real-time face-detection of baby.
+
+Define a route called vid_stream() that renders a stream to show on the web page.
+
+Define a function called stop_all_cameras() that stops all cameras.
+
+Define a function called start_stream() that starts the camera stream.
+
+Define a function called index() that starts the camera stream on index.html.
+
+Define a function called send_notification() that sends a notification to the user's device using the Pushbullet API. This function takes a warning message as input and constructs a title and body for the notification.
+
+Run the Flask app using the run() method.
+
+
+
+
+______ >> End >>>>
+
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Live Video Streaming Web Application ---  version 1</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <h2>Live Video Streaming</h2>
+
+  <div style="display: flex;">
+    <div style="width: 50%; margin-right: 20px;">
+      <img src="{{ url_for('vid_stream') }}" style="width:100%;">
+    </div>
+    <div style="width: 30%; border: 1px solid #ccc; padding: 10px;">
+      <h3>JSON Results</h3>
+      <pre id="json-result"></pre>
+    </div>
+  </div>
+
+  <button onclick="startStream()">Start Stream</button>
+  <button onclick="stopStream()">Stop Stream</button>
+
+  <script>
+    function startStream() {
+      $.post('/start_stream', function(data) {
+        console.log(data);
+      });
+    }
+
+    function stopStream() {
+      $.post('/stop_all_cameras', function(data) {
+        console.log(data);
+      });
+    }
+
+    function getResult() {
+      $.getJSON('/getResult', function(data) {
+        console.log(data);
+        $('#json-result').text(JSON.stringify(data, null, 2));
+      });
+    }
+
+    setInterval(getResult, 100);
+  </script>
+</body>
+
+</html>
