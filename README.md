@@ -1,10 +1,10 @@
 # Baby_Monitoring_App
 
-Baby Monitoring App
+# Baby Monitoring App
 
 This is a Python Flask application that allows you to detect faces in an image and determine if any faces are covered. It uses the MTCNN (Multi-task Cascaded Convolutional Networks) face detection algorithm.
 
-Prerequisites
+# Prerequisites
 
 Python 3.x
 Flask
@@ -14,13 +14,14 @@ MTCNN
 Installation
 
 Clone the repository to your local machine.
+
 Install the required dependencies using the following command:
 
 pip install flask opencv-python numpy mtcnn
 
-Usage
+# Usage
 
-Run the Flask application by executing the following command:
+# Run the Flask application by executing the following command:
 
 python app.py
 
@@ -32,14 +33,14 @@ API Endpoint
 
 The application provides a single API endpoint /detect_faces that accepts a POST request with an image file. It returns a JSON response containing information about the detected faces and whether any faces are covered.
 
-Example POST request:
+# Example POST request:
 
 POST /detect_faces
 
 Request Body:
 - image: [image file]
 
-Example Response:
+# Example Response:
 
 {
   "num_faces": 2,
@@ -54,12 +55,18 @@ Example Response:
   ]
 }
 
-Notes
+# Notes
 
 The application uses the MTCNN face detection algorithm to detect faces in the uploaded image.
+
 It checks if any faces are covered by calculating the ratio of distances between facial keypoints and the width of the face.
+
 If the 'chin' key is present in the detected keypoints, it calculates the chin ratio and considers the face covered if the ratio is below 0.4. Otherwise, it assumes the face is not covered.
+
 The application supports the detection of multiple faces and returns information about each detected face.
+
 The HTML form on the application's main page allows you to upload an image file and perform face detection.
+
 The application can be extended or customized to fit specific use cases and requirements.
+
 Feel free to explore and enhance this baby monitoring app according to your needs. Happy coding!
